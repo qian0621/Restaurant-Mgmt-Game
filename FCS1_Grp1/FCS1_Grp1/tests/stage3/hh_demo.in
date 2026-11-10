@@ -1,0 +1,84 @@
+# Stage 3 - feature demo: Host and Waiter seat together, rejected choices, Happy Hour locking prices.
+# Prompts per turn: [Happy Hour, while unused], Host, Waiter, Chef.
+# T1: #1 arrives and is left waiting
+skip
+wait
+wait
+wait
+# T2
+skip
+wait
+wait
+wait
+# T3
+skip
+wait
+wait
+wait
+# T4: #2 (VIP) arrives. Switch Happy Hour on (covers T4 and T5).
+# Host seats #1; the Waiter first tries the same customer (clash), then seats #2 - two seatings in one turn.
+hh
+seat 1
+seat 1
+seat 2
+wait
+# T5: Happy Hour's second turn. VIP orders a Burger: $15.00 x 0.9 x 0.8 = $10.80.
+# Waiter first tries 'serve 2' (not READY yet), then takes the order; the Chef cooks the order taken this turn.
+wait
+serve 2
+order 2
+cook 2
+# T6: Happy Hour is over. #1's Salad is billed at the full $9.00. Wrong-role and unknown-customer choices are rejected.
+seat 3
+wait
+order 1
+serve 1
+cook 1
+# T7
+wait
+serve 2
+wait
+# T8
+wait
+serve 1
+wait
+# T9
+wait
+wait
+wait
+# T10
+wait
+wait
+wait
+# T11
+wait
+wait
+wait
+# T12
+wait
+wait
+wait
+# T13
+wait
+wait
+wait
+# T14
+wait
+wait
+wait
+# T15
+wait
+wait
+wait
+# T16
+wait
+wait
+wait
+# T17
+wait
+wait
+wait
+# T18
+wait
+wait
+wait

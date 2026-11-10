@@ -1,0 +1,116 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'13px','primaryColor':'#eef3fb','primaryBorderColor':'#5b6b86','lineColor':'#333','actorBkg':'#e8eef7','noteBkgColor':'#fff7d6','noteBorderColor':'#c9b458'},'sequence':{'mirrorActors':false,'messageMargin':26,'width':150,'actorMargin':30,'boxMargin':8,'noteMargin':8}}}%%
+sequenceDiagram
+    autonumber
+    actor M as Manager
+    participant UI as :ConsoleUI
+    participant GC as :GameController
+    participant H as :Host
+    participant W as :Waiter
+    participant Ch as :Chef
+    participant Ca as :Cashier
+    participant R as :Restaurant
+    participant HH as :HappyHour
+    participant V as vip:VIPCustomer
+    participant O as :Order
+
+    Note over M,O: Scenario (Stage 3): VIP no. 2 arrives on turn 4. The manager's Happy Hour choice changes the bill and the VIP's satisfaction.
+    loop turn = 1..18 (turns 4-9 shown)
+        rect rgb(238,243,251)
+        Note over GC,R: Turn 4 - step 1 Arrivals
+        GC->>R: admit(vip) [schedule: turn 4 = VIP, created by CustomerType.create()]
+        R-->>V: state = WAITING (satisfaction 100), joins WaitingQueue
+        GC->>UI: showBoard(restaurant, notices, availableTasks)
+        UI-->>M: turn, revenue, queue, tables, satisfaction, tasks
+        end
+        rect rgb(255,247,214)
+        Note over M,HH: Start of turn - manager decision
+        GC->>UI: askHappyHour()
+        UI->>M: prompt
+        M-->>UI: "hh"
+        alt hh.isAvailable() and manager activates
+            GC->>HH: activate()  [remainingTurns = 2, used = true]
+            GC->>R: applyHappyHourRecovery()
+            R->>V: recoverSatisfaction(15)
+        else manager skips
+            Note right of GC: no discount, no recovery (full price $13.50 later)
+        end
+        end
+        rect rgb(238,243,251)
+        Note over GC,Ch: Step 2 Manager choices, step 3 execution (Host, then Waiter, then Chef)
+        loop for each ManagedStaff in roster [Host, Waiter, Chef] until a valid task or "wait"
+            GC->>UI: promptStaff(role, availableTasks)
+            UI-->>GC: ManagerCommand(TASK "seat" 2)
+            GC->>H: taskFor("seat", vip)
+            H-->>GC: SeatCustomerTask
+            GC->>GC: task.validate(restaurant, plan)
+            alt reason present (e.g. no free table or clash)
+                GC->>UI: showError(reason) - staff task not consumed
+            else valid
+                GC->>GC: plan.add(task)
+            end
+        end
+        GC->>H: task.execute(restaurant, 4) : seat
+        H->>R: seat(vip)
+        R->>V: seatAt(table) [WAITING to SEATED]
+        end
+        Note over GC,R: Turn 4 - step 4 and 5: nobody eating or paying, waiting loss applies (VIP loses 5)
+        GC->>R: applyWaitingLoss()
+        R->>V: loseSatisfaction() [-5 per turn, VIP]
+        GC->>R: endTurn()
+        R->>HH: endTurn() [remainingTurns 2 to 1]
+
+        rect rgb(238,243,251)
+        Note over M,O: Turn 5 - Happy Hour still active, order and cooking
+        GC->>R: applyHappyHourRecovery() [if active]
+        M->>UI: Waiter: "order 2"
+        UI-->>GC: ManagerCommand(TASK "order" 2) [validated, plan.add]
+        M->>UI: Chef: "cook 2"
+        UI-->>GC: ManagerCommand(TASK "cook" 2) [valid because plan.willHaveOrder(vip)]
+        GC->>W: TakeOrderTask.execute(restaurant, 5)
+        W->>R: takeOrder(vip)
+        R->>V: chooseItem(menu) [Burger]
+        R->>R: quote(vip, Burger)
+        R->>V: billFor(Burger) [polymorphic: 10% off = $13.50]
+        R->>HH: applyTo(1350) [active: x 0.8 = $10.80]
+        R->>O: new Order(vip, Burger, 1080) [price locked]
+        R->>V: placeOrder(order) [SEATED to ORDERED]
+        GC->>Ch: CookOrderTask.execute(restaurant, 5)
+        Ch->>O: cookOneUnit() [1 unit left to 0: PLACED to READY]
+        GC->>R: applyWaitingLoss(), endTurn() [HappyHour inactive]
+        end
+
+        rect rgb(238,243,251)
+        Note over M,O: Turn 6 - READY then SERVED (a dish finished in turn 5 may only be served now)
+        M->>UI: Waiter: "serve 2"
+        UI-->>GC: ManagerCommand(TASK "serve" 2)
+        GC->>GC: ServeOrderTask.validate(): order.getStatus() == READY ?
+        GC->>W: task.execute(restaurant, 6)
+        W->>R: serve(vip, 6)
+        R->>O: markServed() [READY to SERVED]
+        R->>V: startEating(6) [ORDERED to EATING, no waiting loss from now on]
+        end
+
+        rect rgb(238,243,251)
+        Note over GC,Ca: Turn 7 - eating, Turn 8 - payment (step 4)
+        GC->>R: finishEating(7) [servedTurn 6 < 7]
+        R->>V: finishEating(7) [EATING to READY_TO_PAY]
+        GC->>Ca: collectPayment(restaurant, 8)
+        Ca->>R: nextToPay(8) [READY_TO_PAY, readyTurn 7 < 8]
+        Ca->>R: collectPayment(vip)
+        R->>V: pay() [records satisfactionAtPayment()]
+        V->>O: markPaid() [SERVED to PAID]
+        V-->>R: table.release()
+        R-->>R: revenue += 1080, paidCount++
+        end
+    end
+    Note over GC,R: Step 6 - after turn 18
+    GC->>GC: config.evaluate(restaurant)
+    GC->>R: getPaidCount(), getRevenueCents(), getPaidSatisfactionTotal()
+    R-->>GC: counts
+    GC-->>GC: GameResult (paid >= 4, revenue >= $45.00, avg >= 60)
+    alt isVictory()
+        GC->>UI: showResult(config, result): VICTORY
+    else
+        GC->>UI: showResult(config, result): DEFEAT
+    end
+    UI-->>M: final summary

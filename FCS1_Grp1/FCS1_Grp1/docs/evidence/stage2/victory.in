@@ -1,0 +1,58 @@
+# Stage 2 - reproducible VICTORY run. Arrivals: #1 Regular (T1), #2 VIP (T4), #3 Regular (T7),
+# #4 Critic (T10), #5 Regular (T13), #6 Regular (T16).
+# Key decision at T10: seat the Critic first and leave the READY Pasta of #3 waiting a little,
+# so the Critic (12 points lost per turn) is served at 64 and writes a glowing review.
+# T1
+seat 1
+wait
+# T2
+order 1
+cook 1
+# T3
+serve 1
+wait
+# T4 (VIP arrives)
+seat 2
+wait
+# T5 (VIP burger: $13.50)
+order 2
+cook 2
+# T6
+serve 2
+wait
+# T7
+seat 3
+wait
+# T8
+order 3
+cook 3
+# T9
+wait
+cook 3
+# T10 (Critic arrives)
+seat 4
+wait
+# T11
+order 4
+cook 4
+# T12
+serve 3
+cook 4
+# T13 (Critic's pasta READY since T12)
+serve 4
+wait
+# T14: both tables are still held by #3 and #4 (customers keep their table until they pay): nothing useful to do
+wait
+wait
+# T15: #3 paid at the end of T14, so a table is free
+seat 5
+wait
+# T16 (#6 arrives)
+order 5
+cook 5
+# T17
+serve 5
+wait
+# T18: #5 is still eating, so it cannot pay within 18 turns
+wait
+wait

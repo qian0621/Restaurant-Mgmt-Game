@@ -1,0 +1,284 @@
+digraph G {
+  rankdir=TB;
+  fontname="Helvetica"; compound=true;
+  node [fontname="Helvetica", fontsize=9];
+  edge [fontname="Helvetica", fontsize=8];
+  nodesep=0.35; ranksep=0.55; splines=true;
+  subgraph cluster_ui {
+    label=<&laquo;package&raquo; restaurant.ui>; style="rounded,dashed"; color="#8a94a6"; fontsize=11;
+  "ui.ConsoleUI" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>ConsoleUI</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>- LINE: String</U><BR/>- in: BufferedReader<BR/>- out: PrintStream<BR/>- echo: boolean</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- readLine(prompt: String): String<BR/><U>- tick(ok: boolean): String</U><BR/><U>- formatAverage(avg: OptionalDouble): String</U><BR/><U>- describeOrder(o: Order): String</U><BR/>+ showMessage(message: String)<BR/>+ showWelcome(config: GameConfig)<BR/>+ showResult(config: GameConfig, result: GameResult)<BR/>+ showTurnHeader(turn: int, maxTurns: int)<BR/>+ showEvents(heading: String, events: List&lt;String&gt;)<BR/>+ showBoard(r: Restaurant, turn: int, maxTurns: int, notices: List&lt;String&gt;, availableTasks: Map&lt;String, List&lt;String&gt;&gt;)<BR/>+ showTurnSummary(r: Restaurant, turn: int)<BR/>+ askHappyHour(): boolean<BR/>+ promptStaff(role: String, options: List&lt;String&gt;): ManagerCommand<BR/>+ showHelp()<BR/>+ showError(message: String)<BR/>+ ConsoleUI(in: BufferedReader, out: PrintStream, echo: boolean)</TD></TR>
+    </TABLE>>];
+  "ui.ManagerCommand" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><FONT POINT-SIZE="8">&laquo;record&raquo;</FONT><BR/><B>ManagerCommand</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- kind: ManagerCommand.Kind<BR/>- verb: String<BR/>- targetId: int<BR/>- message: String</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ parse(raw: String): ManagerCommand</U></TD></TR>
+    </TABLE>>];
+  "ui.ManagerCommand$Kind" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><FONT POINT-SIZE="8">&laquo;enumeration&raquo;</FONT><BR/><B>ManagerCommand.Kind</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">TASK<BR/>WAIT<BR/>HELP<BR/>QUIT<BR/>INVALID</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"> </TD></TR>
+    </TABLE>>];
+  }
+  subgraph cluster_control {
+    label=<&laquo;package&raquo; restaurant.control>; style="rounded,dashed"; color="#8a94a6"; fontsize=11;
+  "control.GameController" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>GameController</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- config: GameConfig<BR/>- restaurant: Restaurant<BR/>- ui: ConsoleUI<BR/>- roster: List&lt;ManagedStaff&gt;<BR/>- cashier: Cashier<BR/>- nextCustomerId: int</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ run(): GameResult<BR/>- playTurn(turn: int)<BR/>- arrivals(turn: int, events: List&lt;String&gt;)<BR/>- happyHourRecovery(): List&lt;String&gt;<BR/>- happyHourNotice(): List&lt;String&gt;<BR/>- describeAvailable(plan: TurnPlan): Map&lt;String, List&lt;String&gt;&gt;<BR/>- offerHappyHour()<BR/>- collectChoices(): TurnPlan<BR/>- chooseTask(staff: ManagedStaff, plan: TurnPlan): StaffTask<BR/>- buildTask(staff: ManagedStaff, cmd: ManagerCommand, plan: TurnPlan): StaffTask<BR/>+ GameController(config: GameConfig, ui: ConsoleUI)</TD></TR>
+    </TABLE>>];
+  "control.TurnPlan" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>TurnPlan</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- tasks: List&lt;StaffTask&gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ add(task: StaffTask)<BR/>+ conflicts(candidate: StaffTask): boolean<BR/>+ tablesClaimed(): int<BR/>+ willHaveOrder(c: Customer): boolean<BR/>+ findConflict(candidate: StaffTask): Optional&lt;StaffTask&gt;<BR/>+ TurnPlan()</TD></TR>
+    </TABLE>>];
+  "control.GameConfig" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>GameConfig</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- maxTurns: int<BR/>- tableCount: int<BR/>- minPaidCustomers: int<BR/>- minRevenueCents: int<BR/>- minAverageSatisfaction: int<BR/>- schedule: ArrivalSchedule</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ base(): GameConfig</U><BR/>+ evaluate(r: Restaurant): GameResult<BR/>+ newMenu(): Menu<BR/>+ newRestaurant(): Restaurant</TD></TR>
+    </TABLE>>];
+  "control.GameResult" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><FONT POINT-SIZE="8">&laquo;record&raquo;</FONT><BR/><B>GameResult</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- paidCount: int<BR/>- revenueCents: int<BR/>- averageSatisfaction: OptionalDouble<BR/>- paidTargetMet: boolean<BR/>- revenueTargetMet: boolean<BR/>- satisfactionTargetMet: boolean</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"> </TD></TR>
+    </TABLE>>];
+  }
+  subgraph cluster_staff {
+    label=<&laquo;package&raquo; restaurant.staff>; style="rounded,dashed"; color="#8a94a6"; fontsize=11;
+  "staff.Staff" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B><I>Staff</I></B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- role: String</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"># Staff(role: String)</TD></TR>
+    </TABLE>>];
+  "staff.ManagedStaff" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B><I>ManagedStaff</I></B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"> </TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><I>+ getVerbs(): List&lt;String&gt;</I><BR/><I># createTask(verb: String, target: Customer): StaffTask</I><BR/>+ taskFor(verb: String, target: Customer): Optional&lt;StaffTask&gt;<BR/>+ availableTasks(restaurant: Restaurant, plan: TurnPlan): List&lt;StaffTask&gt;<BR/># ManagedStaff(role: String)</TD></TR>
+    </TABLE>>];
+  "staff.Waiter" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>Waiter</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"> </TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"># createTask(verb: String, target: Customer): StaffTask<BR/>+ Waiter()</TD></TR>
+    </TABLE>>];
+  "staff.Chef" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>Chef</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"> </TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"># createTask(verb: String, target: Customer): StaffTask<BR/>+ Chef()</TD></TR>
+    </TABLE>>];
+  "staff.Host" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>Host</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"> </TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"># createTask(verb: String, target: Customer): StaffTask<BR/>+ Host()</TD></TR>
+    </TABLE>>];
+  "staff.Cashier" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>Cashier</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"> </TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ collectPayment(restaurant: Restaurant, turn: int): Optional&lt;String&gt;<BR/>+ Cashier()</TD></TR>
+    </TABLE>>];
+  "staff.StaffTask" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B><I>StaffTask</I></B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- actorRole: String<BR/>- target: Customer</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><I>+ validate(restaurant: Restaurant, plan: TurnPlan): Optional&lt;String&gt;</I><BR/><I>+ execute(restaurant: Restaurant, turn: int): String</I><BR/><U># fail(reason: String): Optional&lt;String&gt;</U><BR/><I>+ describe(): String</I><BR/>+ claimsTable(): boolean<BR/>+ createsOrder(): boolean<BR/>+ conflictsWith(other: StaffTask): boolean<BR/># StaffTask(actorRole: String, target: Customer)</TD></TR>
+    </TABLE>>];
+  "staff.SeatCustomerTask" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>SeatCustomerTask</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ VERB: String</U></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ validate(restaurant: Restaurant, plan: TurnPlan): Optional&lt;String&gt;<BR/>+ execute(restaurant: Restaurant, turn: int): String<BR/>+ describe(): String<BR/>+ claimsTable(): boolean<BR/>+ conflictsWith(other: StaffTask): boolean<BR/>+ SeatCustomerTask(actorRole: String, target: Customer)</TD></TR>
+    </TABLE>>];
+  "staff.TakeOrderTask" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>TakeOrderTask</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ VERB: String</U></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ validate(restaurant: Restaurant, plan: TurnPlan): Optional&lt;String&gt;<BR/>+ execute(restaurant: Restaurant, turn: int): String<BR/>+ describe(): String<BR/>+ createsOrder(): boolean<BR/>+ TakeOrderTask(actorRole: String, target: Customer)</TD></TR>
+    </TABLE>>];
+  "staff.ServeOrderTask" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>ServeOrderTask</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ VERB: String</U></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ validate(restaurant: Restaurant, plan: TurnPlan): Optional&lt;String&gt;<BR/>+ execute(restaurant: Restaurant, turn: int): String<BR/>+ describe(): String<BR/>+ ServeOrderTask(actorRole: String, target: Customer)</TD></TR>
+    </TABLE>>];
+  "staff.CookOrderTask" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>CookOrderTask</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ VERB: String</U></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ validate(restaurant: Restaurant, plan: TurnPlan): Optional&lt;String&gt;<BR/>+ execute(restaurant: Restaurant, turn: int): String<BR/>+ describe(): String<BR/>+ CookOrderTask(actorRole: String, target: Customer)</TD></TR>
+    </TABLE>>];
+  }
+  subgraph cluster_model {
+    label=<&laquo;package&raquo; restaurant.model>; style="rounded,dashed"; color="#8a94a6"; fontsize=11;
+  "model.Restaurant" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>Restaurant</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- menu: Menu<BR/>- tables: List&lt;Table&gt;<BR/>- queue: WaitingQueue<BR/>- customers: List&lt;Customer&gt;<BR/>- happyHour: HappyHour<BR/>- revenueCents: int<BR/>- paidCount: int<BR/>- paidSatisfactionTotal: int<BR/>- servedCount: int<BR/>- unhappyDepartures: int</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ quote(c: Customer, item: MenuItem): int<BR/>+ finishEating(turn: int): List&lt;Customer&gt;<BR/>+ nextToPay(turn: int): Optional&lt;Customer&gt;<BR/>+ collectPayment(c: Customer)<BR/>+ seat(c: Customer): Table<BR/>+ serve(c: Customer, turn: int)<BR/>+ freeTableCount(): int<BR/>+ takeOrder(c: Customer): Order<BR/>+ endTurn()<BR/>+ findCustomer(id: int): Optional&lt;Customer&gt;<BR/>+ admit(c: Customer)<BR/>+ applyHappyHourRecovery(): Map&lt;Customer, Integer&gt;<BR/>+ applyWaitingLoss(): List&lt;Customer&gt;<BR/>+ Restaurant(menu: Menu, tableCount: int)</TD></TR>
+    </TABLE>>];
+  "model.Customer" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B><I>Customer</I></B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ START_SATISFACTION: int</U><BR/>- id: int<BR/>- arrivalTurn: int<BR/>- satisfaction: int<BR/>- state: CustomerState<BR/>- table: Table<BR/>- order: Order<BR/>- servedTurn: int<BR/>- readyToPayTurn: int<BR/>- recordedSatisfaction: int</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><I>+ getTypeName(): String</I><BR/><I>+ getLossPerWaitingTurn(): int</I><BR/>- require(expected: CustomerState)<BR/># satisfactionAtPayment(): int<BR/>+ chooseItem(menu: Menu): MenuItem<BR/>+ billFor(item: MenuItem): int<BR/>~ seatAt(t: Table)<BR/>~ placeOrder(o: Order)<BR/>~ startEating(turn: int)<BR/>~ finishEating(turn: int)<BR/>~ pay()<BR/>~ recoverSatisfaction(points: int): int<BR/>~ loseSatisfaction(): boolean<BR/>~ abandon()<BR/># Customer(id: int, arrivalTurn: int)</TD></TR>
+    </TABLE>>];
+  "model.RegularCustomer" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>RegularCustomer</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ LOSS_PER_TURN: int</U></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ RegularCustomer(id: int, arrivalTurn: int)</TD></TR>
+    </TABLE>>];
+  "model.VIPCustomer" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>VIPCustomer</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ LOSS_PER_TURN: int</U><BR/><U>+ BILL_PERCENT: int</U></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ billFor(item: MenuItem): int<BR/>+ VIPCustomer(id: int, arrivalTurn: int)</TD></TR>
+    </TABLE>>];
+  "model.CriticCustomer" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>CriticCustomer</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ LOSS_PER_TURN: int</U><BR/><U>+ REVIEW_THRESHOLD: int</U><BR/><U>+ REVIEW_SWING: int</U></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"># satisfactionAtPayment(): int<BR/>+ chooseItem(menu: Menu): MenuItem<BR/>+ CriticCustomer(id: int, arrivalTurn: int)</TD></TR>
+    </TABLE>>];
+  "model.CustomerType" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><FONT POINT-SIZE="8">&laquo;enumeration&raquo;</FONT><BR/><B>CustomerType</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">REGULAR<BR/>VIP<BR/>CRITIC</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><I>+ create(id: int, arrivalTurn: int): Customer</I></TD></TR>
+    </TABLE>>];
+  "model.CustomerState" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><FONT POINT-SIZE="8">&laquo;enumeration&raquo;</FONT><BR/><B>CustomerState</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">WAITING<BR/>SEATED<BR/>ORDERED<BR/>EATING<BR/>READY_TO_PAY<BR/>PAID<BR/>LEFT</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"> </TD></TR>
+    </TABLE>>];
+  "model.Order" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>Order</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- customer: Customer<BR/>- item: MenuItem<BR/>- billCents: int<BR/>- remainingUnits: int<BR/>- status: OrderStatus</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">~ cancel()<BR/>~ markPaid()<BR/>+ cookOneUnit()<BR/>~ markServed()<BR/>~ Order(customer: Customer, item: MenuItem, billCents: int)</TD></TR>
+    </TABLE>>];
+  "model.OrderStatus" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><FONT POINT-SIZE="8">&laquo;enumeration&raquo;</FONT><BR/><B>OrderStatus</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">PLACED<BR/>PREPARING<BR/>READY<BR/>SERVED<BR/>PAID<BR/>CANCELLED</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"> </TD></TR>
+    </TABLE>>];
+  "model.MenuItem" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>MenuItem</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- name: String<BR/>- priceCents: int<BR/>- prepUnits: int</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ MenuItem(name: String, priceCents: int, prepUnits: int)</TD></TR>
+    </TABLE>>];
+  "model.ComboMeal" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>ComboMeal</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ PRICE_PERCENT: int</U><BR/>- first: MenuItem<BR/>- second: MenuItem</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ ComboMeal(first: MenuItem, second: MenuItem)</TD></TR>
+    </TABLE>>];
+  "model.Menu" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>Menu</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- offerings: List&lt;MenuItem&gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ add(item: MenuItem): Menu<BR/><U>+ standard(): Menu</U><BR/>+ Menu()</TD></TR>
+    </TABLE>>];
+  "model.Table" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>Table</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- number: int<BR/>- occupant: Customer</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">~ release()<BR/>~ occupy(customer: Customer)<BR/>+ Table(number: int)</TD></TR>
+    </TABLE>>];
+  "model.WaitingQueue" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>WaitingQueue</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- waiting: LinkedList&lt;Customer&gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">~ remove(c: Customer)<BR/>~ join(c: Customer)<BR/>+ snapshot(): List&lt;Customer&gt;<BR/>+ WaitingQueue()</TD></TR>
+    </TABLE>>];
+  "model.HappyHour" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>HappyHour</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T"><U>+ DURATION_TURNS: int</U><BR/><U>+ BILL_PERCENT: int</U><BR/><U>+ RECOVERY_POINTS: int</U><BR/>- used: boolean<BR/>- remainingTurns: int</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ activate()<BR/>+ applyTo(billCents: int): int<BR/>+ endTurn()<BR/>+ HappyHour()</TD></TR>
+    </TABLE>>];
+  "model.ArrivalSchedule" [shape=plain, label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2" BGCOLOR="white">
+      <TR><TD ALIGN="CENTER" BGCOLOR="#e8eef7"><B>ArrivalSchedule</B></TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">- arrivals: Map&lt;Integer, CustomerType&gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BALIGN="LEFT" BORDER="1" SIDES="T">+ size(): int<BR/>+ add(turn: int, type: CustomerType): ArrivalSchedule<BR/>+ typeAt(turn: int): Optional&lt;CustomerType&gt;<BR/>+ ArrivalSchedule()</TD></TR>
+    </TABLE>>];
+  }
+  "restaurant.Main" [shape=plain, label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2"><TR><TD BGCOLOR="#e8eef7"><B>Main</B></TD></TR><TR><TD ALIGN="LEFT" BORDER="1" SIDES="T">+ main(args: String[]) {static}</TD></TR></TABLE>>];
+  "model.RegularCustomer" -> "model.Customer" [arrowhead=empty, color="#222222"];
+  "model.VIPCustomer" -> "model.Customer" [arrowhead=empty, color="#222222"];
+  "model.CriticCustomer" -> "model.Customer" [arrowhead=empty, color="#222222"];
+  "model.ComboMeal" -> "model.MenuItem" [arrowhead=empty, color="#222222"];
+  "staff.ManagedStaff" -> "staff.Staff" [arrowhead=empty, color="#222222"];
+  "staff.Cashier" -> "staff.Staff" [arrowhead=empty, color="#222222"];
+  "staff.Waiter" -> "staff.ManagedStaff" [arrowhead=empty, color="#222222"];
+  "staff.Chef" -> "staff.ManagedStaff" [arrowhead=empty, color="#222222"];
+  "staff.Host" -> "staff.ManagedStaff" [arrowhead=empty, color="#222222"];
+  "staff.SeatCustomerTask" -> "staff.StaffTask" [arrowhead=empty, color="#222222"];
+  "staff.TakeOrderTask" -> "staff.StaffTask" [arrowhead=empty, color="#222222"];
+  "staff.ServeOrderTask" -> "staff.StaffTask" [arrowhead=empty, color="#222222"];
+  "staff.CookOrderTask" -> "staff.StaffTask" [arrowhead=empty, color="#222222"];
+  "model.Restaurant" -> "model.Table" [arrowtail=diamond, dir=back, color="#222222", label="tables", taillabel="1", headlabel="1..*", labeldistance=1.4];
+  "model.Restaurant" -> "model.WaitingQueue" [arrowtail=diamond, dir=back, color="#222222", label="queue", taillabel="1", headlabel="1", labeldistance=1.4];
+  "model.Restaurant" -> "model.HappyHour" [arrowtail=diamond, dir=back, color="#222222", label="happyHour", taillabel="1", headlabel="1", labeldistance=1.4];
+  "model.Restaurant" -> "model.Customer" [arrowtail=diamond, dir=back, color="#222222", label="customers", taillabel="1", headlabel="0..*", labeldistance=1.4];
+  "control.GameController" -> "model.Restaurant" [arrowtail=diamond, dir=back, color="#222222", label="restaurant", taillabel="1", headlabel="1", labeldistance=1.4];
+  "control.GameController" -> "staff.ManagedStaff" [arrowtail=diamond, dir=back, color="#222222", label="roster", taillabel="1", headlabel="3", labeldistance=1.4];
+  "control.GameController" -> "staff.Cashier" [arrowtail=diamond, dir=back, color="#222222", label="cashier", taillabel="1", headlabel="1", labeldistance=1.4];
+  "control.TurnPlan" -> "staff.StaffTask" [arrowtail=diamond, dir=back, color="#222222", label="tasks", taillabel="1", headlabel="0..3", labeldistance=1.4];
+  "control.GameConfig" -> "model.ArrivalSchedule" [arrowtail=diamond, dir=back, color="#222222", label="schedule", taillabel="1", headlabel="1", labeldistance=1.4];
+  "model.Restaurant" -> "model.Menu" [arrowtail=odiamond, dir=back, color="#222222", label="menu", taillabel="1", headlabel="1", labeldistance=1.4];
+  "model.Menu" -> "model.MenuItem" [arrowtail=odiamond, dir=back, color="#222222", label="offerings", taillabel="1", headlabel="1..*", labeldistance=1.4];
+  "model.ComboMeal" -> "model.MenuItem" [arrowtail=odiamond, dir=back, color="#222222", label="first", taillabel="1", headlabel="1", labeldistance=1.4];
+  "model.ComboMeal" -> "model.MenuItem" [arrowtail=odiamond, dir=back, color="#222222", label="second", taillabel="1", headlabel="1", labeldistance=1.4];
+  "control.GameController" -> "ui.ConsoleUI" [arrowhead=vee, color="#222222", label="ui", taillabel="1", headlabel="1", labeldistance=1.4];
+  "control.GameController" -> "control.GameConfig" [arrowhead=vee, color="#222222", label="config", taillabel="1", headlabel="1", labeldistance=1.4];
+  "model.Customer" -> "model.Order" [arrowhead=vee, color="#222222", label="order", taillabel="1", headlabel="0..1", labeldistance=1.4];
+  "model.Customer" -> "model.Table" [arrowhead=vee, color="#222222", label="table", taillabel="0..1", headlabel="0..1", labeldistance=1.4];
+  "model.Customer" -> "model.CustomerState" [arrowhead=vee, color="#222222", label="state", taillabel="*", headlabel="1", labeldistance=1.4];
+  "model.Order" -> "model.Customer" [arrowhead=vee, color="#222222", label="customer", taillabel="0..1", headlabel="1", labeldistance=1.4];
+  "model.Order" -> "model.MenuItem" [arrowhead=vee, color="#222222", label="item", taillabel="*", headlabel="1", labeldistance=1.4];
+  "model.Order" -> "model.OrderStatus" [arrowhead=vee, color="#222222", label="status", taillabel="*", headlabel="1", labeldistance=1.4];
+  "model.Table" -> "model.Customer" [arrowhead=vee, color="#222222", label="occupant", taillabel="0..1", headlabel="0..1", labeldistance=1.4];
+  "model.WaitingQueue" -> "model.Customer" [arrowhead=vee, color="#222222", label="waiting", taillabel="0..1", headlabel="0..*", labeldistance=1.4];
+  "staff.StaffTask" -> "model.Customer" [arrowhead=vee, color="#222222", label="target", taillabel="*", headlabel="1", labeldistance=1.4];
+  "ui.ManagerCommand" -> "ui.ManagerCommand$Kind" [arrowhead=vee, color="#222222", label="kind", taillabel="*", headlabel="1", labeldistance=1.4];
+  "restaurant.Main" -> "control.GameController" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«creates/runs»"];
+  "control.GameController" -> "staff.StaffTask" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«validates, executes»"];
+  "control.GameController" -> "ui.ManagerCommand" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«reads»"];
+  "control.GameConfig" -> "control.GameResult" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«creates»"];
+  "ui.ConsoleUI" -> "ui.ManagerCommand" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«creates»"];
+  "ui.ConsoleUI" -> "model.Restaurant" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«displays»"];
+  "staff.ManagedStaff" -> "staff.StaffTask" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«creates»"];
+  "staff.StaffTask" -> "model.Restaurant" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«acts on»"];
+  "staff.StaffTask" -> "control.TurnPlan" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«validates against»"];
+  "model.CustomerType" -> "model.Customer" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«creates»"];
+  "model.ArrivalSchedule" -> "model.CustomerType" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«maps turn to»"];
+  "model.Restaurant" -> "model.Order" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«creates»"];
+  "staff.Cashier" -> "model.Restaurant" [style=dashed, arrowhead=vee, color="#555555", fontcolor="#555555", label="«collects payment from»"];
+  note_enc [shape=note, style=filled, fillcolor="#fff7d6", fontsize=9, label="ENCAPSULATION\lCustomer keeps satisfaction, state, table and order private.\lIts transitions (seatAt, placeOrder, startEating, pay, abandon)\lare package-private and only called by Restaurant, so no\lcaller can skip a step of the dining flow.\l"];
+  note_enc -> "model.Customer" [style=dotted, arrowhead=none];
+  note_poly [shape=note, style=filled, fillcolor="#fff7d6", fontsize=9, label="POLYMORPHISM (customers)\lgetLossPerWaitingTurn(), billFor(), chooseItem() and\lsatisfactionAtPayment() are overridden by VIP and Critic;\lGameController and Restaurant call them without type checks.\l"];
+  note_poly -> "model.CriticCustomer" [style=dotted, arrowhead=none];
+  note_poly -> "model.VIPCustomer" [style=dotted, arrowhead=none];
+  note_comp [shape=note, style=filled, fillcolor="#fff7d6", fontsize=9, label="COMPOSITION\lRestaurant creates and owns its Tables, WaitingQueue,\lCustomers and HappyHour; they live and die with it.\lComboMeal is built from two existing MenuItems.\l"];
+  note_comp -> "model.Restaurant" [style=dotted, arrowhead=none];
+  note_poly2 [shape=note, style=filled, fillcolor="#fff7d6", fontsize=9, label="POLYMORPHISM (tasks)\lvalidate() and execute() differ per StaffTask subclass;\lthe controller treats every task alike (Command pattern).\l"];
+  note_poly2 -> "staff.StaffTask" [style=dotted, arrowhead=none];
+}

@@ -1,0 +1,37 @@
+# Stage 2 - DEFEAT: the manager ignores everyone after turn 9; the Critic (loses 12 per turn) storms out.
+seat 1
+wait
+order 1
+cook 1
+serve 1
+wait
+seat 2
+wait
+order 2
+cook 2
+serve 2
+wait
+seat 3
+wait
+order 3
+cook 3
+wait
+cook 3
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait
+wait

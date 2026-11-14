@@ -1,10 +1,5 @@
 package restaurant.model;
 
-/**
- * A combo of two existing menu items. Preparation units are the sum of the components; the price
- * is 90% of the combined price, rounded to the nearest cent. It is a MenuItem (inheritance), so
- * ordering, cooking and billing treat it like any other dish (polymorphism).
- */
 public class ComboMeal extends MenuItem {
     public static final int PRICE_PERCENT = 90;
 

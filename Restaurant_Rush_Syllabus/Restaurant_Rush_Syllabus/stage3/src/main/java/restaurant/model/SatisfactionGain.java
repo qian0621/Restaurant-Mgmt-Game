@@ -1,6 +1,5 @@
 package restaurant.model;
 
-/** Records that one customer regained some satisfaction (used to report Happy Hour recovery). */
 public class SatisfactionGain {
     private final Customer customer;
     private final int points;

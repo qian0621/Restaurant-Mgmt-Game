@@ -1,6 +1,6 @@
 package restaurant.model;
 
-/** A dish on the menu: name, price in cents and number of preparation units the Chef must spend. */
+
 public class MenuItem {
     private final String name;
     private final int priceCents;

@@ -1,0 +1,572 @@
+==============================================================================
+ RESTAURANT RUSH - you are the manager
+==============================================================================
+ 18 turns, 2 tables. Win: >= 4 paid customers, revenue >= $45.00, average satisfaction >= 60.
+ Each turn you give the Host, Waiter and Chef one task each (or 'wait'). Commands:
+   seat <n>   Host or Waiter: seat queued customer n at a free table (both may seat, different customers)
+   order <n>  Waiter: take seated customer n's order
+   serve <n>  Waiter: serve customer n's READY order
+   cook <n>   Chef: advance customer n's order by one preparation unit
+   wait       do nothing with this staff member (an empty line works too)
+   hh         (at the Happy Hour prompt) switch on Happy Hour, once per game: 2 turns, 20% off new orders,
+              waiting customers recover 15 satisfaction at the start of each of those turns
+   help, quit
+
+==============================================================================
+ TURN 1 / 18
+==============================================================================
+Arrivals:
+  * #1 Regular arrives and joins the waiting queue (satisfaction 100).
+------------------------------------------------------------------------------
+ Turn 1/18 | Revenue $0.00 | Avg satisfaction (paid) N/A
+ Paid 0 | Dishes served 0 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #1 Regular (sat 100)
+ Tables: T1: free  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   1    Regular  WAITING       100  -
+ Staff tasks available:
+   Host     seat 1
+   Waiter   seat 1
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 1
+  Host> seat 1
+  Waiter options: nothing to do (wait)
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+Kitchen and serving:
+  * Host seats #1 Regular at table 1.
+ End of turn 1: served 0 | unhappy departures 0 | revenue $0.00 | avg satisfaction (paid) N/A | turns used 1
+
+==============================================================================
+ TURN 2 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 2/18 | Revenue $0.00 | Avg satisfaction (paid) N/A
+ Paid 0 | Dishes served 0 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: (empty)
+ Tables: T1: #1  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   1    Regular  SEATED        92   -
+ Staff tasks available:
+   Host     -
+   Waiter   order 1
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: nothing to do (wait)
+  Host> wait
+  Waiter options: order 1
+  Waiter> order 1
+  Chef options: cook 1
+  Chef> cook 1
+Kitchen and serving:
+  * Waiter takes #1 Regular's order: Salad ($9.00, 1 prep unit(s)).
+  * Chef cooks Salad for #1 Regular (unit 1 of 1) -> READY.
+ End of turn 2: served 0 | unhappy departures 0 | revenue $0.00 | avg satisfaction (paid) N/A | turns used 2
+
+==============================================================================
+ TURN 3 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 3/18 | Revenue $0.00 | Avg satisfaction (paid) N/A
+ Paid 0 | Dishes served 0 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: (empty)
+ Tables: T1: #1  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   1    Regular  ORDERED       84   Salad $9.00 [READY]
+ Staff tasks available:
+   Host     -
+   Waiter   serve 1
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: nothing to do (wait)
+  Host> wait
+  Waiter options: serve 1
+  Waiter> serve 1
+  Chef options: nothing to do (wait)
+  Chef> wait
+Kitchen and serving:
+  * Waiter serves Salad to #1 Regular (SERVED).
+ End of turn 3: served 1 | unhappy departures 0 | revenue $0.00 | avg satisfaction (paid) N/A | turns used 3
+
+==============================================================================
+ TURN 4 / 18
+==============================================================================
+Arrivals:
+  * #2 VIP arrives and joins the waiting queue (satisfaction 100).
+------------------------------------------------------------------------------
+ Turn 4/18 | Revenue $0.00 | Avg satisfaction (paid) N/A
+ Paid 0 | Dishes served 1 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #2 VIP (sat 100)
+ Tables: T1: #1  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   1    Regular  EATING        84   Salad $9.00 [SERVED]
+   2    VIP      WAITING       100  -
+ Staff tasks available:
+   Host     seat 2
+   Waiter   seat 2
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 2
+  Host> seat 2
+  Waiter options: nothing to do (wait)
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+Kitchen and serving:
+  * Host seats #2 VIP at table 2.
+Eating and payment:
+  * #1 Regular finishes eating and is READY_TO_PAY.
+ End of turn 4: served 1 | unhappy departures 0 | revenue $0.00 | avg satisfaction (paid) N/A | turns used 4
+
+==============================================================================
+ TURN 5 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 5/18 | Revenue $0.00 | Avg satisfaction (paid) N/A
+ Paid 0 | Dishes served 1 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: (empty)
+ Tables: T1: #1  T2: #2
+ Customers:
+   #    Type     State         Sat  Order
+   1    Regular  READY_TO_PAY  84   Salad $9.00 [SERVED]
+   2    VIP      SEATED        95   -
+ Staff tasks available:
+   Host     -
+   Waiter   order 2
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: nothing to do (wait)
+  Host> wait
+  Waiter options: order 2
+  Waiter> order 2
+  Chef options: cook 2
+  Chef> cook 2
+Kitchen and serving:
+  * Waiter takes #2 VIP's order: Burger ($13.50, 1 prep unit(s)).
+  * Chef cooks Burger for #2 VIP (unit 1 of 1) -> READY.
+Eating and payment:
+  * Cashier collects $9.00 from #1 Regular (PAID, satisfaction 84 recorded, table freed).
+ End of turn 5: served 1 | unhappy departures 0 | revenue $9.00 | avg satisfaction (paid) 84.0 | turns used 5
+
+==============================================================================
+ TURN 6 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 6/18 | Revenue $9.00 | Avg satisfaction (paid) 84.0
+ Paid 1 | Dishes served 1 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: (empty)
+ Tables: T1: free  T2: #2
+ Customers:
+   #    Type     State         Sat  Order
+   2    VIP      ORDERED       90   Burger $13.50 [READY]
+ Staff tasks available:
+   Host     -
+   Waiter   serve 2
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: nothing to do (wait)
+  Host> wait
+  Waiter options: serve 2
+  Waiter> serve 2
+  Chef options: nothing to do (wait)
+  Chef> wait
+Kitchen and serving:
+  * Waiter serves Burger to #2 VIP (SERVED).
+ End of turn 6: served 2 | unhappy departures 0 | revenue $9.00 | avg satisfaction (paid) 84.0 | turns used 6
+
+==============================================================================
+ TURN 7 / 18
+==============================================================================
+Arrivals:
+  * #3 Regular arrives and joins the waiting queue (satisfaction 100).
+------------------------------------------------------------------------------
+ Turn 7/18 | Revenue $9.00 | Avg satisfaction (paid) 84.0
+ Paid 1 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #3 Regular (sat 100)
+ Tables: T1: free  T2: #2
+ Customers:
+   #    Type     State         Sat  Order
+   2    VIP      EATING        90   Burger $13.50 [SERVED]
+   3    Regular  WAITING       100  -
+ Staff tasks available:
+   Host     seat 3
+   Waiter   seat 3
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 3
+  Host> seat 3
+  Waiter options: nothing to do (wait)
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+Kitchen and serving:
+  * Host seats #3 Regular at table 1.
+Eating and payment:
+  * #2 VIP finishes eating and is READY_TO_PAY.
+ End of turn 7: served 2 | unhappy departures 0 | revenue $9.00 | avg satisfaction (paid) 84.0 | turns used 7
+
+==============================================================================
+ TURN 8 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 8/18 | Revenue $9.00 | Avg satisfaction (paid) 84.0
+ Paid 1 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: (empty)
+ Tables: T1: #3  T2: #2
+ Customers:
+   #    Type     State         Sat  Order
+   2    VIP      READY_TO_PAY  90   Burger $13.50 [SERVED]
+   3    Regular  SEATED        92   -
+ Staff tasks available:
+   Host     -
+   Waiter   order 3
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: nothing to do (wait)
+  Host> wait
+  Waiter options: order 3
+  Waiter> order 3
+  Chef options: cook 3
+  Chef> cook 3
+Kitchen and serving:
+  * Waiter takes #3 Regular's order: Pasta ($18.00, 2 prep unit(s)).
+  * Chef cooks Pasta for #3 Regular (unit 1 of 2).
+Eating and payment:
+  * Cashier collects $13.50 from #2 VIP (PAID, satisfaction 90 recorded, table freed).
+ End of turn 8: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 8
+
+==============================================================================
+ TURN 9 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 9/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: (empty)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       84   Pasta $18.00 [PREPARING] (1/2 units left)
+ Staff tasks available:
+   Host     -
+   Waiter   -
+   Chef     cook 3
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: nothing to do (wait)
+  Host> wait
+  Waiter options: nothing to do (wait)
+  Waiter> wait
+  Chef options: cook 3
+  Chef> cook 3
+Kitchen and serving:
+  * Chef cooks Pasta for #3 Regular (unit 2 of 2) -> READY.
+ End of turn 9: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 9
+
+==============================================================================
+ TURN 10 / 18
+==============================================================================
+Arrivals:
+  * #4 Critic arrives and joins the waiting queue (satisfaction 100).
+------------------------------------------------------------------------------
+ Turn 10/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #4 Critic (sat 100)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       76   Pasta $18.00 [READY]
+   4    Critic   WAITING       100  -
+ Staff tasks available:
+   Host     seat 4
+   Waiter   serve 3 | seat 4
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 4
+  Host> wait
+  Waiter options: serve 3 | seat 4
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+ End of turn 10: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 10
+
+==============================================================================
+ TURN 11 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 11/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #4 Critic (sat 88)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       68   Pasta $18.00 [READY]
+   4    Critic   WAITING       88   -
+ Staff tasks available:
+   Host     seat 4
+   Waiter   serve 3 | seat 4
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 4
+  Host> wait
+  Waiter options: serve 3 | seat 4
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+ End of turn 11: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 11
+
+==============================================================================
+ TURN 12 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 12/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #4 Critic (sat 76)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       60   Pasta $18.00 [READY]
+   4    Critic   WAITING       76   -
+ Staff tasks available:
+   Host     seat 4
+   Waiter   serve 3 | seat 4
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 4
+  Host> wait
+  Waiter options: serve 3 | seat 4
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+ End of turn 12: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 12
+
+==============================================================================
+ TURN 13 / 18
+==============================================================================
+Arrivals:
+  * #5 Regular arrives and joins the waiting queue (satisfaction 100).
+------------------------------------------------------------------------------
+ Turn 13/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #4 Critic (sat 64), #5 Regular (sat 100)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       52   Pasta $18.00 [READY]
+   4    Critic   WAITING       64   -
+   5    Regular  WAITING       100  -
+ Staff tasks available:
+   Host     seat 4 | seat 5
+   Waiter   serve 3 | seat 4 | seat 5
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 4 | seat 5
+  Host> wait
+  Waiter options: serve 3 | seat 4 | seat 5
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+ End of turn 13: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 13
+
+==============================================================================
+ TURN 14 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 14/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #4 Critic (sat 52), #5 Regular (sat 92)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       44   Pasta $18.00 [READY]
+   4    Critic   WAITING       52   -
+   5    Regular  WAITING       92   -
+ Staff tasks available:
+   Host     seat 4 | seat 5
+   Waiter   serve 3 | seat 4 | seat 5
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 4 | seat 5
+  Host> wait
+  Waiter options: serve 3 | seat 4 | seat 5
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+ End of turn 14: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 14
+
+==============================================================================
+ TURN 15 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 15/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #4 Critic (sat 40), #5 Regular (sat 84)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       36   Pasta $18.00 [READY]
+   4    Critic   WAITING       40   -
+   5    Regular  WAITING       84   -
+ Staff tasks available:
+   Host     seat 4 | seat 5
+   Waiter   serve 3 | seat 4 | seat 5
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 4 | seat 5
+  Host> wait
+  Waiter options: serve 3 | seat 4 | seat 5
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+ End of turn 15: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 15
+
+==============================================================================
+ TURN 16 / 18
+==============================================================================
+Arrivals:
+  * #6 Regular arrives and joins the waiting queue (satisfaction 100).
+------------------------------------------------------------------------------
+ Turn 16/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #4 Critic (sat 28), #5 Regular (sat 76), #6 Regular (sat 100)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       28   Pasta $18.00 [READY]
+   4    Critic   WAITING       28   -
+   5    Regular  WAITING       76   -
+   6    Regular  WAITING       100  -
+ Staff tasks available:
+   Host     seat 4 | seat 5 | seat 6
+   Waiter   serve 3 | seat 4 | seat 5 | seat 6
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 4 | seat 5 | seat 6
+  Host> wait
+  Waiter options: serve 3 | seat 4 | seat 5 | seat 6
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+ End of turn 16: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 16
+
+==============================================================================
+ TURN 17 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 17/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #4 Critic (sat 16), #5 Regular (sat 68), #6 Regular (sat 92)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       20   Pasta $18.00 [READY]
+   4    Critic   WAITING       16   -
+   5    Regular  WAITING       68   -
+   6    Regular  WAITING       92   -
+ Staff tasks available:
+   Host     seat 4 | seat 5 | seat 6
+   Waiter   serve 3 | seat 4 | seat 5 | seat 6
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 4 | seat 5 | seat 6
+  Host> wait
+  Waiter options: serve 3 | seat 4 | seat 5 | seat 6
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+ End of turn 17: served 2 | unhappy departures 0 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 17
+
+==============================================================================
+ TURN 18 / 18
+==============================================================================
+------------------------------------------------------------------------------
+ Turn 18/18 | Revenue $22.50 | Avg satisfaction (paid) 87.0
+ Paid 2 | Dishes served 2 | Unhappy departures 0
+ Happy Hour: available (once per game)
+ Waiting queue: #4 Critic (sat 4), #5 Regular (sat 60), #6 Regular (sat 84)
+ Tables: T1: #3  T2: free
+ Customers:
+   #    Type     State         Sat  Order
+   3    Regular  ORDERED       12   Pasta $18.00 [READY]
+   4    Critic   WAITING       4    -
+   5    Regular  WAITING       60   -
+   6    Regular  WAITING       84   -
+ Staff tasks available:
+   Host     seat 4 | seat 5 | seat 6
+   Waiter   serve 3 | seat 4 | seat 5 | seat 6
+   Chef     -
+   Cashier  collects one payment automatically
+------------------------------------------------------------------------------
+  Happy Hour ('hh' to activate, Enter to skip)> skip
+  Host options: seat 4 | seat 5 | seat 6
+  Host> wait
+  Waiter options: serve 3 | seat 4 | seat 5 | seat 6
+  Waiter> wait
+  Chef options: nothing to do (wait)
+  Chef> wait
+Waiting and abandonment:
+  * #4 Critic lost patience and leaves without paying (order cancelled, table freed).
+ End of turn 18: served 2 | unhappy departures 1 | revenue $22.50 | avg satisfaction (paid) 87.0 | turns used 18
+
+==============================================================================
+ GAME OVER after 18 turns
+==============================================================================
+ Paid customers: 2 (need 4) [NOT met]
+ Revenue: $22.50 (need $45.00) [NOT met]
+ Average satisfaction: 87.0 (need 60) [met]
+ *** DEFEAT ***

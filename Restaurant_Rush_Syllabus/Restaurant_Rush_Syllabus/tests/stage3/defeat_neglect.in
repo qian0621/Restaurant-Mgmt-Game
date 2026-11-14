@@ -1,0 +1,74 @@
+# Stage 3 - reproducible DEFEAT run: turns 1-9 as in victory.in, then the manager stops working.
+# Only #1 and #2 pay ($22.50): paid-count and revenue targets are missed.
+skip
+seat 1
+wait
+wait
+skip
+wait
+order 1
+cook 1
+skip
+wait
+serve 1
+wait
+skip
+seat 2
+wait
+wait
+skip
+wait
+order 2
+cook 2
+skip
+wait
+serve 2
+wait
+skip
+seat 3
+wait
+wait
+skip
+wait
+order 3
+cook 3
+skip
+wait
+wait
+cook 3
+skip
+wait
+wait
+wait
+skip
+wait
+wait
+wait
+skip
+wait
+wait
+wait
+skip
+wait
+wait
+wait
+skip
+wait
+wait
+wait
+skip
+wait
+wait
+wait
+skip
+wait
+wait
+wait
+skip
+wait
+wait
+wait
+skip
+wait
+wait
+wait

@@ -6,7 +6,6 @@ import restaurant.control.GameController;
 import restaurant.control.GameQuitException;
 import restaurant.ui.ConsoleUI;
 
-/** Entry point. Use --echo when piping a script so the transcript shows the typed commands. */
 public class Main {
     public static void main(String[] args) {
         boolean echo = false;

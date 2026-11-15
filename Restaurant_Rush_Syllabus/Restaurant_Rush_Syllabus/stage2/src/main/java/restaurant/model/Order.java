@@ -1,6 +1,5 @@
 package restaurant.model;
 
-/** One customer's order. The bill is locked in when the order is placed. */
 public class Order {
     private final Customer customer;
     private final MenuItem item;
@@ -35,12 +34,10 @@ public class Order {
         return status;
     }
 
-    /** True while the Chef can still advance this order. */
     public boolean isCookable() {
         return status == OrderStatus.PLACED || status == OrderStatus.PREPARING;
     }
 
-    /** Spend one preparation unit; the last unit makes the order READY. */
     public void cookOneUnit() {
         if (!isCookable()) {
             throw new GameRuleException("Order is " + status + ", cannot cook");

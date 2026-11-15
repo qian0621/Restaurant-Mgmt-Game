@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import restaurant.model.Customer;
 
-/** One preparation unit per turn on one order. */
 public class Chef extends ManagedStaff {
     public Chef() {
         super("Chef");

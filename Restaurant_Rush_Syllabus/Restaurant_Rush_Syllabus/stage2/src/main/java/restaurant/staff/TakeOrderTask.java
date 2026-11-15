@@ -8,7 +8,6 @@ import restaurant.model.Money;
 import restaurant.model.Order;
 import restaurant.model.Restaurant;
 
-/** Take a seated customer's order. The customer decides what to eat; the choice is shown afterwards. */
 public class TakeOrderTask extends StaffTask {
     public static final String VERB = "order";
 

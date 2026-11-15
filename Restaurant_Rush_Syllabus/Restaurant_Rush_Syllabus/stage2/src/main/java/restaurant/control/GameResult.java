@@ -1,6 +1,5 @@
 package restaurant.control;
 
-/** The outcome of the objective check after the last turn. */
 public class GameResult {
     private final int paidCount;
     private final int revenueCents;
@@ -27,7 +26,6 @@ public class GameResult {
         return revenueCents;
     }
 
-    /** Sum of the satisfaction values recorded at payment (average = total / paid count). */
     public int getSatisfactionTotal() {
         return satisfactionTotal;
     }

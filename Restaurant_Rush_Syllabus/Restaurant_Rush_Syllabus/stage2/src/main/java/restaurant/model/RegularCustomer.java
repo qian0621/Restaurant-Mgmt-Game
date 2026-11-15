@@ -1,6 +1,5 @@
 package restaurant.model;
 
-/** The standard customer: loses 8 satisfaction per waiting turn and pays full price. */
 public class RegularCustomer extends Customer {
     public static final int LOSS_PER_TURN = 8;
 

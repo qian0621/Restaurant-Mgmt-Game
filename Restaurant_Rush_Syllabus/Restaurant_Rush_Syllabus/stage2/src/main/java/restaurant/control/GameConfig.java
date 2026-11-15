@@ -5,7 +5,6 @@ import restaurant.model.CustomerType;
 import restaurant.model.Menu;
 import restaurant.model.Restaurant;
 
-/** The game setting and its victory targets. {@link #base()} is the setting the brief requires. */
 public class GameConfig {
     private final int maxTurns;
     private final int tableCount;
@@ -24,10 +23,6 @@ public class GameConfig {
         this.schedule = schedule;
     }
 
-    /**
-     * 18 turns, 2 tables, six arrivals on turns 1, 4, 7, 10, 13, 16; win with 4 paid, $45, avg 60.
-     * From Stage 2 the turn-4 arrival is a VIP and the turn-10 arrival is a Critic.
-     */
     public static GameConfig base() {
         ArrivalSchedule schedule = new ArrivalSchedule();
         schedule.add(1, CustomerType.REGULAR);
@@ -71,11 +66,9 @@ public class GameConfig {
         return new Restaurant(newMenu(), tableCount);
     }
 
-    /** Checks the three targets against the final state of the restaurant. */
     public GameResult evaluate(Restaurant r) {
         boolean paidOk = r.getPaidCount() >= minPaidCustomers;
         boolean revenueOk = r.getRevenueCents() >= minRevenueCents;
-        // average >= target, compared with whole numbers to avoid floating-point surprises
         boolean satisfactionOk = r.getPaidCount() > 0
                 && r.getPaidSatisfactionTotal() >= minAverageSatisfaction * r.getPaidCount();
         return new GameResult(r.getPaidCount(), r.getRevenueCents(), r.getPaidSatisfactionTotal(),

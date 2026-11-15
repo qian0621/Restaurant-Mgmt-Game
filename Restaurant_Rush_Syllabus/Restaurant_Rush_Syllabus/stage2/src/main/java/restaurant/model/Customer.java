@@ -2,11 +2,6 @@ package restaurant.model;
 
 import java.util.List;
 
-/**
- * A customer. Subclasses supply the behaviour that differs between customer kinds; the state
- * machine (WAITING, SEATED, ORDERED, EATING, READY_TO_PAY, PAID, or LEFT) is guarded here so that
- * no caller can skip a step.
- */
 public abstract class Customer {
     public static final int START_SATISFACTION = 100;
 
@@ -25,33 +20,23 @@ public abstract class Customer {
         this.arrivalTurn = arrivalTurn;
     }
 
-    // ---- behaviour that differs by customer kind (overridden in subclasses) ----
 
     public abstract String getTypeName();
 
-    /** Satisfaction lost at the end of a turn in which this customer has not yet been served. */
     public abstract int getLossPerWaitingTurn();
 
-    /**
-     * Documented choice rule: customer #k picks the ((k-1) mod n)-th menu offering, so a run is
-     * fully reproducible without randomness.
-     */
     public MenuItem chooseItem(Menu menu) {
         List<MenuItem> offerings = menu.getOfferings();
         return offerings.get((id - 1) % offerings.size());
     }
 
-    /** What this customer is billed for an item. Full price unless a subclass says otherwise. */
     public int billFor(MenuItem item) {
         return item.getPriceCents();
     }
 
-    /** The satisfaction recorded when this customer pays. Normally the current value. */
     protected int satisfactionAtPayment() {
         return satisfaction;
     }
-
-    // ---- queries ----
 
     public int getId() {
         return id;
@@ -135,13 +120,11 @@ public abstract class Customer {
         state = CustomerState.PAID;
     }
 
-    /** Applies this turn's waiting loss (never below 0). Returns true if the customer reached 0. */
     boolean loseSatisfaction() {
         satisfaction = Math.max(0, satisfaction - getLossPerWaitingTurn());
         return satisfaction == 0;
     }
 
-    /** Leaves unhappy: the unfinished order is cancelled and the table freed. */
     void abandon() {
         if (order != null) {
             order.cancel();

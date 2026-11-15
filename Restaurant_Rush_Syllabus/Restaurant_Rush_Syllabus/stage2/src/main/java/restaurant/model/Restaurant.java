@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * The restaurant aggregate: tables, waiting queue, customers and the running score. All game rules
- * that change customers, orders and tables go through here, so the staff tasks and the controller
- * never touch another object's state directly.
- */
 public class Restaurant {
     private final Menu menu;
     private final List<Table> tables = new ArrayList<>();
@@ -28,7 +23,6 @@ public class Restaurant {
         }
     }
 
-    // ---- queries ----
 
     public Menu getMenu() {
         return menu;
@@ -66,12 +60,10 @@ public class Restaurant {
         return new ArrayList<>(customers);
     }
 
-    /** Customers still inside the restaurant (a stream with a method reference). */
     public List<Customer> getActiveCustomers() {
         return customers.stream().filter(Customer::isActive).collect(Collectors.toList());
     }
 
-    /** The customer with this number, or null if there is none. */
     public Customer findCustomer(int id) {
         for (Customer c : customers) {
             if (c.getId() == id) {
@@ -91,16 +83,13 @@ public class Restaurant {
         return n;
     }
 
-    // ---- step 1: arrivals ----
 
     public void admit(Customer c) {
         customers.add(c);
         queue.join(c);
     }
 
-    // ---- waiter and chef actions ----
 
-    /** Seats a queued customer at the lowest-numbered free table. */
     public Table seat(Customer c) {
         for (Table t : tables) {
             if (t.isFree()) {
@@ -112,7 +101,6 @@ public class Restaurant {
         throw new GameRuleException("no free table");
     }
 
-    /** The customer chooses a dish; the bill is locked in at this moment. */
     public Order takeOrder(Customer c) {
         MenuItem item = c.chooseItem(menu);
         Order order = new Order(c, item, quote(c, item));
@@ -120,7 +108,6 @@ public class Restaurant {
         return order;
     }
 
-    /** The bill a customer will get for an item: the customer's own rule decides (e.g. VIP discount). */
     public int quote(Customer c, MenuItem item) {
         return c.billFor(item);
     }
@@ -131,9 +118,6 @@ public class Restaurant {
         servedCount++;
     }
 
-    // ---- step 4: eating and payment ----
-
-    /** Customers served on an earlier turn become READY_TO_PAY. Returns who changed. */
     public List<Customer> finishEating(int turn) {
         List<Customer> done = new ArrayList<>();
         for (Customer c : customers) {
@@ -145,10 +129,6 @@ public class Restaurant {
         return done;
     }
 
-    /**
-     * The READY_TO_PAY customer who has waited longest and is allowed to pay this turn (a customer
-     * who became ready this turn pays next turn at the earliest). Null if there is none.
-     */
     public Customer nextToPay(int turn) {
         Customer best = null;
         for (Customer c : customers) {
@@ -169,9 +149,6 @@ public class Restaurant {
         paidSatisfactionTotal += c.getRecordedSatisfaction();
     }
 
-    // ---- step 5: waiting and abandonment ----
-
-    /** Applies the end-of-turn waiting loss. Returns the customers who left unhappy. */
     public List<Customer> applyWaitingLoss() {
         List<Customer> left = new ArrayList<>();
         for (Customer c : customers) {

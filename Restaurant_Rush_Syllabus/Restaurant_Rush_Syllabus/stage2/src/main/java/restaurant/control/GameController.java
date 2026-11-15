@@ -11,17 +11,10 @@ import restaurant.staff.ManagedStaff;
 import restaurant.staff.StaffTask;
 import restaurant.staff.Waiter;
 
-/**
- * Control class: runs the six steps of each turn. It asks the UI (through the GameUI interface) for
- * decisions, asks staff tasks to validate and execute themselves, and asks the restaurant to apply
- * the turn-end rules. It never inspects what kind of customer or task it is handling: it just
- * calls the overridden methods (polymorphism).
- */
 public class GameController {
     private final GameConfig config;
     private final Restaurant restaurant;
     private final GameUI ui;
-    /** Staff the manager directs, in the order they act in step 3. */
     private final List<ManagedStaff> roster = new ArrayList<>();
     private final Cashier cashier = new Cashier();
     private int nextCustomerId = 1;
@@ -38,13 +31,12 @@ public class GameController {
         return restaurant;
     }
 
-    /** Plays all turns and returns the result. Throws GameQuitException if the manager quits. */
     public GameResult run() {
         ui.showWelcome(config);
         for (int turn = 1; turn <= config.getMaxTurns(); turn++) {
             playTurn(turn);
         }
-        GameResult result = config.evaluate(restaurant);       // step 6
+        GameResult result = config.evaluate(restaurant);       
         ui.showResult(config, result);
         return result;
     }
@@ -53,21 +45,21 @@ public class GameController {
         ui.showTurnHeader(turn, config.getMaxTurns());
         List<String> events = new ArrayList<>();
 
-        arrivals(turn, events);                                   // step 1
+        arrivals(turn, events);                                   
         ui.showEvents("Arrivals:", events);
         List<String> notices = new ArrayList<>();
         ui.showBoard(restaurant, turn, config.getMaxTurns(), notices, describeAvailable(new TurnPlan()));
 
-        TurnPlan plan = collectChoices();                         // step 2
+        TurnPlan plan = collectChoices();                         
 
         events = new ArrayList<>();
-        for (StaffTask task : plan.getTasks()) {                  // step 3
+        for (StaffTask task : plan.getTasks()) {                  
             events.add(task.execute(restaurant, turn));
         }
         ui.showEvents("Kitchen and serving:", events);
 
         events = new ArrayList<>();
-        for (Customer c : restaurant.finishEating(turn)) {        // step 4
+        for (Customer c : restaurant.finishEating(turn)) {        
             events.add(c + " finishes eating and is READY_TO_PAY.");
         }
         String payment = cashier.collectPayment(restaurant, turn);
@@ -77,14 +69,13 @@ public class GameController {
         ui.showEvents("Eating and payment:", events);
 
         events = new ArrayList<>();
-        for (Customer c : restaurant.applyWaitingLoss()) {        // step 5
+        for (Customer c : restaurant.applyWaitingLoss()) {        
             events.add(c + " lost patience and leaves without paying (order cancelled, table freed).");
         }
         ui.showEvents("Waiting and abandonment:", events);
         ui.showTurnSummary(restaurant, turn);
     }
 
-    // ---- step 1 ----
 
     private void arrivals(int turn, List<String> events) {
         CustomerType type = config.getSchedule().typeAt(turn);
@@ -96,7 +87,6 @@ public class GameController {
         }
     }
 
-    // ---- step 2 ----
 
     private TurnPlan collectChoices() {
         TurnPlan plan = new TurnPlan();
@@ -109,7 +99,6 @@ public class GameController {
         return plan;
     }
 
-    /** Keeps asking until the manager gives a valid task or waits. Invalid choices cost nothing. */
     private StaffTask chooseTask(ManagedStaff staff, TurnPlan plan) {
         while (true) {
             List<String> options = new ArrayList<>();
@@ -134,7 +123,6 @@ public class GameController {
         }
     }
 
-    /** Returns a validated task, or null after telling the manager why the choice failed. */
     private StaffTask buildTask(ManagedStaff staff, ManagerCommand cmd, TurnPlan plan) {
         Customer customer = restaurant.findCustomer(cmd.getTargetId());
         if (customer == null) {

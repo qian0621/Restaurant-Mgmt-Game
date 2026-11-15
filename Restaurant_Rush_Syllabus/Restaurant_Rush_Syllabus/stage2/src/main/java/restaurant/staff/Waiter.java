@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import restaurant.model.Customer;
 
-/** One task per turn: seat a queued customer, take an order, or serve a READY order. */
 public class Waiter extends ManagedStaff {
     public Waiter() {
         super("Waiter");

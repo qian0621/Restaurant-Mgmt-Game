@@ -7,7 +7,6 @@ import restaurant.model.Order;
 import restaurant.model.OrderStatus;
 import restaurant.model.Restaurant;
 
-/** Serve an order that was already READY when the turn began. */
 public class ServeOrderTask extends StaffTask {
     public static final String VERB = "serve";
 

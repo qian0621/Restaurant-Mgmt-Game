@@ -7,7 +7,6 @@ import restaurant.model.Order;
 import restaurant.model.OrderStatus;
 import restaurant.model.Restaurant;
 
-/** Advance one order by one preparation unit. May target an order the Waiter takes this same turn. */
 public class CookOrderTask extends StaffTask {
     public static final String VERB = "cook";
 

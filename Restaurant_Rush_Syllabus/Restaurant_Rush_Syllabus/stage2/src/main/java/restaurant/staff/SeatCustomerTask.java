@@ -7,7 +7,6 @@ import restaurant.model.CustomerState;
 import restaurant.model.Restaurant;
 import restaurant.model.Table;
 
-/** Seat one queued customer at a free table. */
 public class SeatCustomerTask extends StaffTask {
     public static final String VERB = "seat";
 

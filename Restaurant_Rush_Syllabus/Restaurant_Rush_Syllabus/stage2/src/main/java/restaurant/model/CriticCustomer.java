@@ -1,13 +1,5 @@
 package restaurant.model;
 
-/**
- * Impatient (12 per waiting turn) and judgemental. Documented special behaviour:
- * (1) Order preference: always orders the most elaborate offering (most preparation units; the
- *     first such item on the menu if tied), which ties up the Chef.
- * (2) Reaction to service: the review is written when paying. If satisfaction is at least 60 the
- *     review is glowing (+10, max 100); otherwise it is harsh (-10, min 0). The adjusted value is
- *     what counts towards the average satisfaction of paid customers.
- */
 public class CriticCustomer extends Customer {
     public static final int LOSS_PER_TURN = 12;
     public static final int REVIEW_THRESHOLD = 60;
